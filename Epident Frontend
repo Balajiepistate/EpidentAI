@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Registration</title>
+</head>
+<body>
+  <h2>Register</h2>
+  <form id="registrationForm">
+    <label>Name:</label><br>
+    <input type="text" name="name" required><br><br>
+
+    <label>Email:</label><br>
+    <input type="email" name="email" required><br><br>
+
+    <label>Password:</label><br>
+    <input type="password" name="password" required><br><br>
+
+    <input type="checkbox" id="disclaimer" required> I accept the terms and conditions.<br><br>
+
+    <button type="submit">Register</button>
+  </form>
+
+  <script>
+    const form = document.getElementById('registrationForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!document.getElementById('disclaimer').checked) {
+        alert("You must accept the terms and conditions.");
+        return;
+      }
+
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+
+      try {
+        const res = await fetch('/register', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(data),
+        });
+        const result = await res.json();
+        alert(result.message);
+      } catch (error) {
+        alert('Registration failed');
+      }
+    });
+  </script>
+</body>
+</html>
